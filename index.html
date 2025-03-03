@@ -3,136 +3,625 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alka Online Learn Hub</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>CS Quiz Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: #fff;
+            font-family: 'Fira Code', monospace;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2ecc71 100%);
+            color: #e0e0e0;
             line-height: 1.6;
             overflow-x: hidden;
+            animation: pageLoad 1s ease-out;
         }
-        header {
-            background: rgba(0, 123, 255, 0.95);
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+
+        @keyframes pageLoad {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
-        header h1 {
-            font-size: 2.5em;
-        }
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px 0;
-        }
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: background 0.3s, color 0.3s;
-        }
-        nav ul li a:hover {
-            background: #fff;
-            color: #007bff;
-        }
+
         .container {
-            padding: 40px 20px;
             max-width: 1200px;
             margin: 0 auto;
-            text-align: center;
-        }
-        .course-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-        .course {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
             padding: 20px;
+        }
+
+        header {
+            background: #1a1a1a;
+            color: #2ecc71;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #2ecc71;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #2ecc71;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #27ae60;
+        }
+
+        .login-page, .section {
+            background: #2c2c2c;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin-top: 20px;
+            display: none;
+            border: 1px solid #2ecc71;
+        }
+
+        .login-page.active, .section.active {
+            display: block;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #2ecc71;
+            border-radius: 5px;
+            font-family: 'Fira Code', monospace;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+        }
+
+        button, #login-btn {
+            padding: 12px;
+            background: #2ecc71;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-weight: 700;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
-        .course:hover {
-            transform: translateY(-10px);
+
+        button:hover, #login-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
         }
-        .course img {
+
+        .user-info {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .progress-bar {
             width: 100%;
-            height: 180px;
-            object-fit: cover;
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #2ecc71;
+        }
+
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .timer {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .question {
+            display: none;
+            padding: 20px;
+            background: #333;
             border-radius: 8px;
-            margin-bottom: 15px;
+            border: 1px solid #2ecc71;
+            margin-bottom: 20px;
         }
-        footer {
-            background: rgba(0, 0, 0, 0.85);
+
+        .question.active {
+            display: block;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .option {
             padding: 15px;
+            margin: 10px 0;
+            background: #2c2c2c;
+            border: 1px solid #2ecc71;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #27ae60;
+            background: #3d3d3d;
+        }
+
+        .option.selected {
+            background: #2ecc71;
+            color: #1a1a1a;
+            border-color: #27ae60;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        #prev { background: #e74c3c; color: white; }
+        #prev:hover { background: #c0392b; }
+        #next { background: #2ecc71; }
+        #next:hover { background: #27ae60; }
+        #submit { background: #f1c40f; color: #1a1a1a; }
+        #submit:hover { background: #d4ac0d; }
+
+        #result-section {
             text-align: center;
-            width: 100%;
+        }
+
+        #result {
+            padding: 20px;
+            border-radius: 5px;
+            font-weight: 700;
+            background: #333;
+            border: 1px solid #2ecc71;
+        }
+
+        .result-success {
+            color: #2ecc71;
+        }
+
+        .result-fail {
+            color: #e74c3c;
+        }
+
+        .book-list, .notification-list {
+            list-style: none;
+        }
+
+        .book-list li, .notification-list li {
+            padding: 15px;
+            background: #333;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #2ecc71;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                margin-top: 10px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Alka Online Learn Hub</h1>
         <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#courses">Books</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 100 100" style="fill: #2ecc71;">
+                    <rect x="20" y="20" width="60" height="60" rx="10"/>
+                    <text x="35" y="60" font-size="30" fill="#1a1a1a">CS</text>
+                </svg>
+                <span class="logo-text">CS Quiz Pro</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" data-section="quiz">Quiz</a>
+                <a href="#" data-section="book">Book</a>
+                <a href="#" data-section="notification">Notification</a>
+                <a href="#" data-section="result">Result</a>
+            </div>
         </nav>
     </header>
 
-    <section id="home" class="container">
-        <h2>Computer Science Books</h2>
-        <p>Explore top books essential for computer science students and professionals.</p>
-    </section>
+    <div class="container">
+        <!-- Login Page -->
+        <div class="login-page active" id="login-page">
+            <h2>Login</h2>
+            <form class="login-form" id="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" id="login-btn">Login</button>
+            </form>
+        </div>
 
-    <section id="courses" class="container">
-        <h2>Recommended Books</h2>
-        <div class="course-list">
-            <div class="course">
-                <img src="algo.jpeg" alt="Algorithms">
-                <h3>"Introduction to Algorithms" by Cormen</h3>
-                <p>Master algorithms and data structures.</p>
+        <!-- Quiz Section -->
+        <div class="section" id="quiz-section">
+            <h2>Quiz</h2>
+            <div class="user-info">Welcome, <span id="user-name">Guest</span>!</div>
+            <div class="progress-bar">
+                <div class="progress"></div>
             </div>
-            <div class="course">
-                <img src="os.jpg" alt="Operating Systems">
+            <div class="timer">Time remaining: <span id="time">15:00</span></div>
 
-                <h3>"Operating System Concepts" by Silberschatz</h3>
-                <p>Learn core OS principles.</p>
+            <!-- Questions (15 included, add more to reach 50) -->
+            <div class="question active" data-answer="c">
+                <h3>1. What does CPU stand for?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Computer Processing Unit</div>
+                    <div class="option" data-value="b">Central Program Unit</div>
+                    <div class="option" data-value="c">Central Processing Unit</div>
+                    <div class="option" data-value="d">Computer Program Unit</div>
+                </div>
             </div>
-            <div class="course">
-                <img src="cn.jpeg" alt="Computer Networking">
-                <h3>"Computer Networking" by Kurose & Ross</h3>
-                <p>Understand networking fundamentals.</p>
+
+            <div class="question" data-answer="b">
+                <h3>2. Which is NOT a programming language?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Python</div>
+                    <div class="option" data-value="b">HTML</div>
+                    <div class="option" data-value="c">Java</div>
+                    <div class="option" data-value="d">C++</div>
+                </div>
             </div>
-            <div class="course">
-                <img src="dbms.jpeg" alt="Database Management Systems">
-                <h3>"Database System Concepts" by Korth</h3>
-                <p>Essential database management concepts.</p>
+
+            <div class="question" data-answer="a">
+                <h3>3. What is the time complexity of binary search?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">O(log n)</div>
+                    <div class="option" data-value="b">O(n)</div>
+                    <div class="option" data-value="c">O(n²)</div>
+                    <div class="option" data-value="d">O(1)</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="d">
+                <h3>4. Which protocol is used for secure web browsing?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">FTP</div>
+                    <div class="option" data-value="b">SMTP</div>
+                    <div class="option" data-value="c">HTTP</div>
+                    <div class="option" data-value="d">HTTPS</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="c">
+                <h3>5. What does RAM stand for?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Read Always Memory</div>
+                    <div class="option" data-value="b">Run Access Memory</div>
+                    <div class="option" data-value="c">Random Access Memory</div>
+                    <div class="option" data-value="d">Read Access Module</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="b">
+                <h3>6. Which is a NoSQL database?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">MySQL</div>
+                    <div class="option" data-value="b">MongoDB</div>
+                    <div class="option" data-value="c">PostgreSQL</div>
+                    <div class="option" data-value="d">Oracle</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="a">
+                <h3>7. What is the full form of IP in networking?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Internet Protocol</div>
+                    <div class="option" data-value="b">Internal Process</div>
+                    <div class="option" data-value="c">Internet Package</div>
+                    <div class="option" data-value="d">Input Port</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="d">
+                <h3>8. Which sorting algorithm has the best average-case complexity?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Bubble Sort</div>
+                    <div class="option" data-value="b">Selection Sort</div>
+                    <div class="option" data-value="c">Insertion Sort</div>
+                    <div class="option" data-value="d">Quick Sort</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="c">
+                <h3>9. What does OOP stand for?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Object Operating Program</div>
+                    <div class="option" data-value="b">Operational Object Protocol</div>
+                    <div class="option" data-value="c">Object-Oriented Programming</div>
+                    <div class="option" data-value="d">Ordered Operation Process</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="b">
+                <h3>10. Which is a version control system?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Docker</div>
+                    <div class="option" data-value="b">Git</div>
+                    <div class="option" data-value="c">Jenkins</div>
+                    <div class="option" data-value="d">Kubernetes</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="a">
+                <h3>11. What is 1111 in decimal?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">15</div>
+                    <div class="option" data-value="b">13</div>
+                    <div class="option" data-value="c">11</div>
+                    <div class="option" data-value="d">16</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="c">
+                <h3>12. Which company developed Java?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Microsoft</div>
+                    <div class="option" data-value="b">Google</div>
+                    <div class="option" data-value="c">Sun Microsystems</div>
+                    <div class="option" data-value="d">Apple</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="d">
+                <h3>13. What does SQL stand for?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Simple Query Language</div>
+                    <div class="option" data-value="b">Structured Quick Language</div>
+                    <div class="option" data-value="c">System Query Logic</div>
+                    <div class="option" data-value="d">Structured Query Language</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="b">
+                <h3>14. Which is NOT a CPU manufacturer?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Intel</div>
+                    <div class="option" data-value="b">NVIDIA</div>
+                    <div class="option" data-value="c">AMD</div>
+                    <div class="option" data-value="d">Qualcomm</div>
+                </div>
+            </div>
+
+            <div class="question" data-answer="a">
+                <h3>15. What is the primary function of an OS?</h3>
+                <div class="options">
+                    <div class="option" data-value="a">Manage hardware resources</div>
+                    <div class="option" data-value="b">Compile code</div>
+                    <div class="option" data-value="c">Create databases</div>
+                    <div class="option" data-value="d">Design graphics</div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button id="prev">Prev</button>
+                <button id="next">Next</button>
+                <button id="submit" style="display: none;">Submit</button>
+            </div>
+        </div>
+
+        <!-- Book Section -->
+        <div class="section" id="book-section">
+            <h2>Book Resources</h2>
+            <ul class="book-list">
+                <li>Data Structures and Algorithms - Cormen</li>
+                <li>Operating Systems - Tanenbaum</li>
+                <li>Computer Networks - Kurose</li>
+            </ul>
+        </div>
+
+        <!-- Notification Section -->
+        <div class="section" id="notification-section">
+            <h2>Notifications</h2>
+            <ul class="notification-list">
+                <li>New quiz added: March 03, 2025</li>
+                <li>System update scheduled: March 10, 2025</li>
+                <li>Leaderboard reset: March 15, 2025</li>
+            </ul>
+        </div>
+
+        <!-- Result Section -->
+        <div class="section" id="result-section">
+            <h2>Quiz Results</h2>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const loginPage = document.getElementById('login-page');
+        const quizSection = document.getElementById('quiz-section');
+        const bookSection = document.getElementById('book-section');
+        const notificationSection = document.getElementById('notification-section');
+        const resultSection = document.getElementById('result-section');
+        const loginForm = document.getElementById('login-form');
+        const userNameSpan = document.getElementById('user-name');
+        
+        const questions = document.querySelectorAll('.question');
+        let currentQuestion = 0;
+        let score = 0;
+        const userAnswers = new Array(questions.length);
+        let timeLeft = 900; // 15 minutes
+
+        // Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             
-    </section>
+            if (username && password.length >= 4) {
+                userNameSpan.textContent = username;
+                loginPage.classList.remove('active');
+                quizSection.classList.add('active');
+                startTimer();
+            } else {
+                alert('Username required, password must be 4+ characters');
+            }
+        });
 
-    <footer>
-        <p>© 2025 Alka Online Learn Hub. All Rights Reserved.</p>
-    </footer>
+        // Navigation between sections
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.dataset.section;
+                [quizSection, bookSection, notificationSection, resultSection].forEach(s => 
+                    s.classList.remove('active'));
+                document.getElementById(`${section}-section`).classList.add('active');
+            });
+        });
+
+        // Timer
+        let timer;
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('time').textContent = 
+                    `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const index = Array.from(questions).indexOf(question);
+                userAnswers[index] = this.dataset.value;
+                
+                this.parentElement.querySelectorAll('.option').forEach(opt => 
+                    opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Quiz navigation
+        document.getElementById('next').addEventListener('click', () => {
+            if (currentQuestion < questions.length - 1) {
+                changeQuestion(1);
+            }
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                changeQuestion(-1);
+            }
+        });
+
+        document.getElementById('submit').addEventListener('click', submitQuiz);
+
+        function changeQuestion(direction) {
+            questions[currentQuestion].classList.remove('active');
+            currentQuestion += direction;
+            questions[currentQuestion].classList.add('active');
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('prev').style.display = 
+                currentQuestion === 0 ? 'none' : 'inline-block';
+            document.getElementById('next').style.display = 
+                currentQuestion === questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById('submit').style.display = 
+                currentQuestion === questions.length - 1 ? 'inline-block' : 'none';
+            
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.querySelector('.progress').style.width = `${progress}%`;
+        }
+
+        function submitQuiz() {
+            clearInterval(timer);
+            score = 0;
+            questions.forEach((question, index) => {
+                if (userAnswers[index] === question.dataset.answer) {
+                    score++;
+                }
+            });
+            
+            const result = document.getElementById('result');
+            const percentage = (score / questions.length) * 100;
+            result.textContent = `${userNameSpan.textContent}'s Score: ${score}/${questions.length} (${percentage.toFixed(1)}%)`;
+            result.className = percentage >= 60 ? 'result-success' : 'result-fail';
+            
+            quizSection.classList.remove('active');
+            resultSection.classList.add('active');
+        }
+
+        updateUI();
+    </script>
 </body>
 </html>
 
