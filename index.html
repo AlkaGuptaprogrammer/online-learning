@@ -1,627 +1,399 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS Quiz Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Amazon.com: Online Shopping for Electronics, Apparel, Computers, Books, DVDs &amp; more</title>
 
-        body {
-            font-family: 'Fira Code', monospace;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2ecc71 100%);
-            color: #e0e0e0;
-            line-height: 1.6;
-            overflow-x: hidden;
-            animation: pageLoad 1s ease-out;
-        }
-
-        @keyframes pageLoad {
-            0% {
-                opacity: 0;
-                transform: translateY(50px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: #1a1a1a;
-            color: #2ecc71;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid #2ecc71;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            color: #2ecc71;
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #27ae60;
-        }
-
-        .login-page, .section {
-            background: #2c2c2c;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            margin-top: 20px;
-            display: none;
-            border: 1px solid #2ecc71;
-        }
-
-        .login-page.active, .section.active {
-            display: block;
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        input {
-            padding: 12px;
-            border: 1px solid #2ecc71;
-            border-radius: 5px;
-            font-family: 'Fira Code', monospace;
-            background: #1a1a1a;
-            color: #e0e0e0;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #27ae60;
-            box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
-        }
-
-        button, #login-btn {
-            padding: 12px;
-            background: #2ecc71;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover, #login-btn:hover {
-            background: #27ae60;
-            transform: translateY(-2px);
-        }
-
-        .user-info {
-            color: #7f8c8d;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #1a1a1a;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            border: 1px solid #2ecc71;
-        }
-
-        .progress {
-            height: 100%;
-            background: #2ecc71;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .timer {
-            color: #e74c3c;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .question {
-            display: none;
-            padding: 20px;
-            background: #333;
-            border-radius: 8px;
-            border: 1px solid #2ecc71;
-            margin-bottom: 20px;
-        }
-
-        .question.active {
-            display: block;
-        }
-
-        .options {
-            margin-left: 20px;
-        }
-
-        .option {
-            padding: 15px;
-            margin: 10px 0;
-            background: #2c2c2c;
-            border: 1px solid #2ecc71;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .option:hover {
-            border-color: #27ae60;
-            background: #3d3d3d;
-        }
-
-        .option.selected {
-            background: #2ecc71;
-            color: #1a1a1a;
-            border-color: #27ae60;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        #prev { background: #e74c3c; color: white; }
-        #prev:hover { background: #c0392b; }
-        #next { background: #2ecc71; }
-        #next:hover { background: #27ae60; }
-        #submit { background: #f1c40f; color: #1a1a1a; }
-        #submit:hover { background: #d4ac0d; }
-
-        #result-section {
-            text-align: center;
-        }
-
-        #result {
-            padding: 20px;
-            border-radius: 5px;
-            font-weight: 700;
-            background: #333;
-            border: 1px solid #2ecc71;
-        }
-
-        .result-success {
-            color: #2ecc71;
-        }
-
-        .result-fail {
-            color: #e74c3c;
-        }
-
-        .book-list, .notification-list {
-            list-style: none;
-        }
-
-        .book-list li, .notification-list li {
-            padding: 15px;
-            background: #333;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #2ecc71;
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .nav-links {
-                margin-top: 10px;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .navigation {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .container {
-                padding: 10px;
-            }
-        }
-    </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <svg width="40" height="40" viewBox="0 0 100 100" style="fill: #2ecc71;">
-                    <rect x="20" y="20" width="60" height="60" rx="10"/>
-                    <text x="35" y="60" font-size="30" fill="#1a1a1a">CS</text>
-                </svg>
-                <span class="logo-text">CS Quiz Pro</span>
-            </div>
-            <div class="nav-links">
-                <a href="#" data-section="quiz">Quiz</a>
-                <a href="#" data-section="book">Book</a>
-                <a href="#" data-section="notification">Notification</a>
-                <a href="#" data-section="result">Result</a>
-            </div>
-        </nav>
-    </header>
+  <a id="banner" href="#"></a>
+  <!-- Main body -->
 
-    <div class="container">
-        <!-- Login Page -->
-        <div class="login-page active" id="login-page">
-            <h2>Login</h2>
-            <form class="login-form" id="login-form">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit" id="login-btn">Login</button>
-            </form>
+  <header>
+    <a id="nav-top"></a>
+
+    <div id="nav-belt">
+      <div class="nav-left">
+        <div id="nav-logo">
+          <a href="#" class="nav-logo-link"></a>
+          <a href="#" class="nav-logo-tagline">Try Prime</a>
         </div>
-
-        <!-- Quiz Section -->
-        <div class="section" id="quiz-section">
-            <h2>Quiz</h2>
-            <div class="user-info">Welcome, <span id="user-name">Guest</span>!</div>
-            <div class="progress-bar">
-                <div class="progress"></div>
-            </div>
-            <div class="timer">Time remaining: <span id="time">15:00</span></div>
-
-            <!-- Questions (15 included, add more to reach 50) -->
-            <div class="question active" data-answer="c">
-                <h3>1. What does CPU stand for?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Computer Processing Unit</div>
-                    <div class="option" data-value="b">Central Program Unit</div>
-                    <div class="option" data-value="c">Central Processing Unit</div>
-                    <div class="option" data-value="d">Computer Program Unit</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="b">
-                <h3>2. Which is NOT a programming language?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Python</div>
-                    <div class="option" data-value="b">HTML</div>
-                    <div class="option" data-value="c">Java</div>
-                    <div class="option" data-value="d">C++</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="a">
-                <h3>3. What is the time complexity of binary search?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">O(log n)</div>
-                    <div class="option" data-value="b">O(n)</div>
-                    <div class="option" data-value="c">O(n²)</div>
-                    <div class="option" data-value="d">O(1)</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="d">
-                <h3>4. Which protocol is used for secure web browsing?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">FTP</div>
-                    <div class="option" data-value="b">SMTP</div>
-                    <div class="option" data-value="c">HTTP</div>
-                    <div class="option" data-value="d">HTTPS</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="c">
-                <h3>5. What does RAM stand for?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Read Always Memory</div>
-                    <div class="option" data-value="b">Run Access Memory</div>
-                    <div class="option" data-value="c">Random Access Memory</div>
-                    <div class="option" data-value="d">Read Access Module</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="b">
-                <h3>6. Which is a NoSQL database?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">MySQL</div>
-                    <div class="option" data-value="b">MongoDB</div>
-                    <div class="option" data-value="c">PostgreSQL</div>
-                    <div class="option" data-value="d">Oracle</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="a">
-                <h3>7. What is the full form of IP in networking?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Internet Protocol</div>
-                    <div class="option" data-value="b">Internal Process</div>
-                    <div class="option" data-value="c">Internet Package</div>
-                    <div class="option" data-value="d">Input Port</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="d">
-                <h3>8. Which sorting algorithm has the best average-case complexity?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Bubble Sort</div>
-                    <div class="option" data-value="b">Selection Sort</div>
-                    <div class="option" data-value="c">Insertion Sort</div>
-                    <div class="option" data-value="d">Quick Sort</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="c">
-                <h3>9. What does OOP stand for?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Object Operating Program</div>
-                    <div class="option" data-value="b">Operational Object Protocol</div>
-                    <div class="option" data-value="c">Object-Oriented Programming</div>
-                    <div class="option" data-value="d">Ordered Operation Process</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="b">
-                <h3>10. Which is a version control system?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Docker</div>
-                    <div class="option" data-value="b">Git</div>
-                    <div class="option" data-value="c">Jenkins</div>
-                    <div class="option" data-value="d">Kubernetes</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="a">
-                <h3>11. What is 1111 in decimal?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">15</div>
-                    <div class="option" data-value="b">13</div>
-                    <div class="option" data-value="c">11</div>
-                    <div class="option" data-value="d">16</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="c">
-                <h3>12. Which company developed Java?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Microsoft</div>
-                    <div class="option" data-value="b">Google</div>
-                    <div class="option" data-value="c">Sun Microsystems</div>
-                    <div class="option" data-value="d">Apple</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="d">
-                <h3>13. What does SQL stand for?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Simple Query Language</div>
-                    <div class="option" data-value="b">Structured Quick Language</div>
-                    <div class="option" data-value="c">System Query Logic</div>
-                    <div class="option" data-value="d">Structured Query Language</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="b">
-                <h3>14. Which is NOT a CPU manufacturer?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Intel</div>
-                    <div class="option" data-value="b">NVIDIA</div>
-                    <div class="option" data-value="c">AMD</div>
-                    <div class="option" data-value="d">Qualcomm</div>
-                </div>
-            </div>
-
-            <div class="question" data-answer="a">
-                <h3>15. What is the primary function of an OS?</h3>
-                <div class="options">
-                    <div class="option" data-value="a">Manage hardware resources</div>
-                    <div class="option" data-value="b">Compile code</div>
-                    <div class="option" data-value="c">Create databases</div>
-                    <div class="option" data-value="d">Design graphics</div>
-                </div>
-            </div>
-
-            <div class="navigation">
-                <button id="prev">Prev</button>
-                <button id="next">Next</button>
-                <button id="submit" style="display: none;">Submit</button>
-            </div>
+      </div>
+      <div class="nav-right">
+        <div id="nav-holiday">
+          <a href="#"></a>
         </div>
-
-        <!-- Book Section -->
-        <div class="section" id="book-section">
-            <h2>Book Resources</h2>
-            <ul class="book-list">
-                <li>Data Structures and Algorithms - Cormen</li>
-                <li>Operating Systems - Tanenbaum</li>
-                <li>Computer Networks - Kurose</li>
-            </ul>
+      </div>
+      <div class="nav-fill">
+        <div id="nav-search">
+          <form>
+            <div class="nav-left">
+              <span class="nav-search-label">All</span>
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+              <select id="nav-search-select">
+                <option selected="selected" value="aps">All Departments</option>
+                <option value="alexa-skills">Alexa Skills</option>
+                <option value="instant-video">Amazon Video</option>
+                <option value="warehouse-deals">Amazon Warehouse Deals</option>
+                <option value="appliances">Appliances</option>
+                <option value="mobile-apps">Apps &amp; Games</option>
+                <option value="arts-crafts">Arts, Crafts &amp; Sewing</option>
+                <option value="automotive">Automotive Parts &amp; Accessories</option>
+                <option value="baby-products">Baby</option>
+                <option value="beauty">Beauty &amp; Personal Care</option>
+                <option value="stripbooks">Books</option>
+                <option value="popular">CDs &amp; Vinyl</option>
+                <option value="mobile">Cell Phones &amp; Accessories</option>
+                <option value="fashion">Clothing, Shoes &amp; Jewelry</option>
+                <option value="fashion-womens">&nbsp;&nbsp;&nbsp;Women</option>
+                <option value="fashion-mens">&nbsp;&nbsp;&nbsp;Men</option>
+                <option value="fashion-girls">&nbsp;&nbsp;&nbsp;Girls</option>
+                <option value="fashion-boys">&nbsp;&nbsp;&nbsp;Boys</option>
+                <option value="fashion-baby">&nbsp;&nbsp;&nbsp;Baby</option>
+                <option value="collectibles">Collectibles &amp; Fine Art</option>
+                <option value="computers">Computers</option>
+                <option value="courses">Courses</option>
+                <option value="financial">Credit and Payment Cards</option>
+                <option value="digital-music">Digital Music</option>
+                <option value="electronics">Electronics</option>
+                <option value="gift-cards">Gift Cards</option>
+                <option value="grocery">Grocery &amp; Gourmet Food</option>
+                <option value="handmade">Handmade</option>
+                <option value="hpc">Health, Household &amp; Baby Care</option>
+                <option value="local-services">Home &amp; Business Services</option>
+                <option value="garden">Home &amp; Kitchen</option>
+                <option value="industrial">Industrial &amp; Scientific</option>
+                <option value="digital-text">Kindle Store</option>
+                <option value="fashion-luggage">Luggage &amp; Travel Gear</option>
+                <option value="luxury-beauty">Luxury Beauty</option>
+                <option value="magazines">Magazine Subscriptions</option>
+                <option value="movies-tv">Movies &amp; TV</option>
+                <option value="mi">Musical Instruments</option>
+                <option value="office-products">Office Products</option>
+                <option value="lawngarden">Patio, Lawn &amp; Garden</option>
+                <option value="pets">Pet Supplies</option>
+                <option value="prime-exclusive">Prime Exclusive</option>
+                <option value="pantry">Prime Pantry</option>
+                <option value="software">Software</option>
+                <option value="sporting">Sports &amp; Outdoors</option>
+                <option value="tools">Tools &amp; Home Improvement</option>
+                <option value="toys-and-games">Toys &amp; Games</option>
+                <option value="vehicles">Vehicles</option>
+                <option value="videogames">Video Games</option>
+                <option value="wine">Wine</option>
+              </select>
+            </div>
+            <div class="nav-right">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              <input type="submit">
+            </div>
+            <div class="nav-fill">
+              <input type="text" autocomplete="off">
+            </div>
+          </form>
         </div>
-
-        <!-- Notification Section -->
-        <div class="section" id="notification-section">
-            <h2>Notifications</h2>
-            <ul class="notification-list">
-                <li>New quiz added: March 03, 2025</li>
-                <li>System update scheduled: March 10, 2025</li>
-                <li>Leaderboard reset: March 15, 2025</li>
-            </ul>
-        </div>
-
-        <!-- Result Section -->
-        <div class="section" id="result-section">
-            <h2>Quiz Results</h2>
-            <div id="result"></div>
-        </div>
+      </div>
     </div>
 
-    <script>
-        const loginPage = document.getElementById('login-page');
-        const quizSection = document.getElementById('quiz-section');
-        const bookSection = document.getElementById('book-section');
-        const notificationSection = document.getElementById('notification-section');
-        const resultSection = document.getElementById('result-section');
-        const loginForm = document.getElementById('login-form');
-        const userNameSpan = document.getElementById('user-name');
-        
-        const questions = document.querySelectorAll('.question');
-        let currentQuestion = 0;
-        let score = 0;
-        const userAnswers = new Array(questions.length);
-        let timeLeft = 900; // 15 minutes
+    <nav id="nav-main">
+      <div class="nav-left">
+        <div class="nav-shop">
+          <a class="nav-a" href="#">
+            Departments
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <a class="nav-a" href="#">
+          <span>EN</span>
+          <i class="fa fa-globe" aria-hidden="true"></i>
+          <i class="fa fa-caret-down" aria-hidden="true"></i>
+        </a>
 
-        // Login
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (username && password.length >= 4) {
-                userNameSpan.textContent = username;
-                loginPage.classList.remove('active');
-                quizSection.classList.add('active');
-                startTimer();
-            } else {
-                alert('Username required, password must be 4+ characters');
-            }
-        });
+        <a class="nav-a" href="#">
+          <span>Hello. Sign in</span>
+          Accounts &amp; Lists
+          <i class="fa fa-caret-down" aria-hidden="true"></i>
+        </a>
 
-        // Navigation between sections
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const section = link.dataset.section;
-                [quizSection, bookSection, notificationSection, resultSection].forEach(s => 
-                    s.classList.remove('active'));
-                document.getElementById(`${section}-section`).classList.add('active');
-            });
-        });
+        <a class="nav-a" href="#">
+          Orders
+        </a>
 
-        // Timer
-        let timer;
-        function startTimer() {
-            timer = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('time').textContent = 
-                    `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    submitQuiz();
-                }
-            }, 1000);
-        }
+        <a class="nav-a" href="#">
+          Try Prime
+          <i class="fa fa-caret-down" aria-hidden="true"></i>
+        </a>
 
-        // Option selection
-        document.querySelectorAll('.option').forEach(option => {
-            option.addEventListener('click', function() {
-                const question = this.closest('.question');
-                const index = Array.from(questions).indexOf(question);
-                userAnswers[index] = this.dataset.value;
-                
-                this.parentElement.querySelectorAll('.option').forEach(opt => 
-                    opt.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
+        <a class="nav-a cart" href="#">
+          <span>0</span>
+          Cart
+        </a>
+      </div>
+      <div class="nav-fill">
+        <ul>
+          <li><a href="#">Your Amazon.com</a></li>
+          <li><a href="#">Today's Deals</a></li>
+          <li><a href="#">Gift Cards &amp; Registry</a></li>
+          <li><a href="#">Sell</a></li>
+          <li><a href="#">Help</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-        // Quiz navigation
-        document.getElementById('next').addEventListener('click', () => {
-            if (currentQuestion < questions.length - 1) {
-                changeQuestion(1);
-            }
-        });
+  <section id="promo">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="promo-carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <img src="img/slide_1.jpg">
+              </div>
+              <div class="item">
+                <img src="img/slide_2.jpg">
+              </div>
+              <div class="item">
+                <img src="img/slide_3.jpg">
+              </div>
+              <div class="item">
+                <img src="img/slide_4.jpg">
+              </div>
+              <div class="item">
+                <img src="img/slide_5.jpg">
+              </div>
+              <div class="item">
+                <img src="img/slide_6.jpg">
+              </div>
+              <div class="item">
+                <img src="img/slide_7.jpg">
+              </div>
+            </div>
 
-        document.getElementById('prev').addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                changeQuestion(-1);
-            }
-        });
+            <!-- Controls -->
+            <a class="left carousel-control" href="#promo-carousel" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#promo-carousel" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        document.getElementById('submit').addEventListener('click', submitQuiz);
+  <section id="products">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="col-lg-3">
+            <div class="col text-center" id="welcome">
+              <h2>Welcome</h2>
+              <p>Sign in for the best experience</p>
+              <button class="btn">Sign in securely</button>
+              <div class="footer">
+                New to Amazon? <a href="#">Start here</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="col" id="amazon-basics">
+              <h2>Explore AmazonBasics</h2>
+              <a href="#" class="thumbnail text-center">
+                <img src="img/product_1.jpg" alt="Product 1">
+                <span class="caption">Home</span>
+              </a>
+              <a href="#" class="thumbnail text-center">
+                <img src="img/product_2.jpg" alt="Product 2">
+                <span class="caption">Bluetooth</span>
+              </a>
+              <a href="#" class="thumbnail text-center">
+                <img src="img/product_3.jpg" alt="Product 3">
+                <span class="caption">Pets</span>
+              </a>
+              <a href="#" class="thumbnail text-center">
+                <img src="img/product_4.jpg" alt="Product 4">
+                <span class="caption">Computer</span>
+              </a>
+              <div class="footer">
+                <a href="#">Shop all AmazonBasics</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="col" id="dress">
+              <h2>The dress shop</h2>
+              <div class="row text-center">
+                <a href="#"><img src="img/dress.png"></a>
+              </div>
 
-        function changeQuestion(direction) {
-            questions[currentQuestion].classList.remove('active');
-            currentQuestion += direction;
-            questions[currentQuestion].classList.add('active');
-            updateUI();
-        }
+              <div class="footer">
+                <a href="#">Shop women's dresses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div>
+              <a href="#"><img src="img/product_5.jpg" alt="Product 5"></a>
+            </div>
+            <div class="col" id="deal-day">
+              <h2>Deal of the day</h2>
+              <h3>$163.99</h3>
+              <small>List: <s>$425.00</s> (47% off)</small>
+              <a href="#"><img src="img/product_6.jpg" alt="Product 6"></a>
+              <div class="footer">
+                <a href="#">Shop all deals</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        function updateUI() {
-            document.getElementById('prev').style.display = 
-                currentQuestion === 0 ? 'none' : 'inline-block';
-            document.getElementById('next').style.display = 
-                currentQuestion === questions.length - 1 ? 'none' : 'inline-block';
-            document.getElementById('submit').style.display = 
-                currentQuestion === questions.length - 1 ? 'inline-block' : 'none';
-            
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.querySelector('.progress').style.width = `${progress}%`;
-        }
+  <footer>
+    <div class="top text-center">
+      <a href="#nav-top">Back to top</a>
+    </div>
 
-        function submitQuiz() {
-            clearInterval(timer);
-            score = 0;
-            questions.forEach((question, index) => {
-                if (userAnswers[index] === question.dataset.answer) {
-                    score++;
-                }
-            });
-            
-            const result = document.getElementById('result');
-            const percentage = (score / questions.length) * 100;
-            result.textContent = `${userNameSpan.textContent}'s Score: ${score}/${questions.length} (${percentage.toFixed(1)}%)`;
-            result.className = percentage >= 60 ? 'result-success' : 'result-fail';
-            
-            quizSection.classList.remove('active');
-            resultSection.classList.add('active');
-        }
+    <div class="middle">
+      <div class="center">
+        <ul>
+          <li><h3>Get to Know Us</h3></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">About Amazon</a></li>
+          <li><a href="#">Investor Relations</a></li>
+          <li><a href="#">Amazon Devices</a></li>
+        </ul>
+        <ul>
+          <li><h3>Make Money with Us</h3></li>
+          <li><a href="#">Sell on Amazon</a></li>
+          <li><a href="#">Sell Your Services on Amazon</a></li>
+          <li><a href="#">Sell on Amazon Business</a></li>
+          <li><a href="#">Sell Your Apps on Amazon</a></li>
+          <li><a href="#">Become an Affiliate</a></li>
+          <li><a href="#">Advertise Your Products</a></li>
+          <li><a href="#">Self-Publish with Us</a></li>
+          <li><a href="#">Become an Amazon Vendor</a></li>
+          <li><a href="#">Sell Your Subscription on Amazon</a></li>
+          <li><a href="#">› See all</a></li>
+        </ul>
+        <ul>
+          <li><h3>Amazon Payment Products</h3></li>
+          <li><a href="#">Amazon Rewards Visa Signature Cards</a></li>
+          <li><a href="#">Amazon.com Store Card</a></li>
+          <li><a href="#">Amazon.com Corporate Credit Line</a></li>
+          <li><a href="#">Shop with Points</a></li>
+          <li><a href="#">Credit Card Marketplace</a></li>
+          <li><a href="#">Reload Your Balance</a></li>
+          <li><a href="#">Amazon Currency Converter</a></li>
+        </ul>
+        <ul>
+          <li><h3>Let Us Help You</h3></li>
+          <li><a href="#">Your Account</a></li>
+          <li><a href="#">Your Orders</a></li>
+          <li><a href="#">Shipping Rates &amp; Policies</a></li>
+          <li><a href="#">Amazon Prime</a></li>
+          <li><a href="#">Returns &amp; Replacements</a></li>
+          <li><a href="#">Manage Your Content and Devices</a></li>
+          <li><a href="#">Amazon Assistant</a></li>
+          <li><a href="#">Help</a></li>
+        </ul>
+      </div>
 
-        updateUI();
-    </script>
+      <ul class="copy text-center">
+        <li><a href="#" class="logo"></a></li>
+        <li><a href="#" class="select"><i class="fa fa-globe" aria-hidden="true"></i> English</a></li>
+        <li><a href="#" class="select"><i class="flag-icon-us"></i>United States</a></li>
+      </ul>
+    </div>
+
+    <div class="bottom">
+      <div class="center">
+        <ul>
+          <li><a href="#">Amazon Music<br/><span>Stream millions<br> of songs</span></a></li>
+          <li><a href="#">AmazonFresh<br/><span>Groceries &amp; More<br> Right To Your Door</span></a></li>
+          <li><a href="#">Amazon Web Services<br/><span>Scalable Cloud<br> Computing Services</span></a></li>
+          <li><a href="#">East Dane<br/><span>Designer Men's<br> Fashion</span></a></li>
+          <li><a href="#">Prime Now<br/><span>FREE 2-Hour Delivery<br> on Everyday Items</span></a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#">Amazon Drive<br/><span>Cloud storage<br> from Amazon</span></a></li>
+          <li><a href="#">AmazonGlobal<br/><span>Ship Orders<br> Internationally</span></a></li>
+          <li><a href="#">Audible<br/><span>Download<br> Audio Books</span></a></li>
+          <li><a href="#">Fabric<br/><span>Sewing, Quilting<br> &amp; Knitting</span></a></li>
+          <li><a href="#">Prime Photos<br/><span>Unlimited Photo Storage<br> Free With Prime</span></a></li>
+          <li><a href="#">Woot!<br/><span>Deals and <br> Shenanigans</span></a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#">6pm<br/><span>Score deals<br> on fashion brands</span></a></li>
+          <li><a href="#">Home Services<br/><span>Handpicked Pros<br> Happiness Guarantee</span></a></li>
+          <li><a href="#">Book Depository<br/><span>Books With Free<br> Delivery Worldwide</span></a></li>
+          <li><a href="#">Goodreads<br/><span>Book reviews<br> &amp; recommendations</span></a></li>
+          <li><a href="#">Shopbop<br/><span>Designer<br> Fashion Brands</span></a></li>
+          <li><a href="#">Zappos<br/><span>Shoes &amp;<br> Clothing</span></a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#">AbeBooks<br/><span>Books, art<br> &amp; collectibles</span></a></li>
+          <li><a href="#">Amazon Inspire<br/><span>Free Digital Educational<br>  Resources</span></a></li>
+          <li><a href="#">Box Office Mojo<br/><span>Find Movie<br> Box Office Data</span></a></li>
+          <li><a href="#">IMDb<br/><span>Movies, TV<br> &amp; Celebrities</span></a></li>
+          <li><a href="#">TenMarks.com<br/><span>Math Activities<br> for Kids &amp; Schools</span></a></li>
+          <li><a href="#">Souq.com<br/><span>Shop Online in<br> the Middle East</span></a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#">ACX <br/><span>Audiobook Publishing<br> Made Easy</span></a></li>
+          <li><a href="#">Amazon Rapids<br/><span>Fun stories for<br>  kids on the go</span></a></li>
+          <li><a href="#">ComiXology<br/><span>Thousands of<br> Digital Comics</span></a></li>
+          <li><a href="#">IMDbPro<br/><span>Get Info Entertainment<br> Professionals Need</span></a></li>
+          <li><a href="#">Warehouse Deals<br/><span>Open-Box<br> Discounts</span></a></li>
+          <li><a href="#">Subscribe with Amazon<br/><span>Discover &amp; try<br> subscription services</span></a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#">Alexa<br/><span>Actionable Analytics<br> for the Web</span></a></li>
+          <li><a href="#">Amazon Restaurants<br/><span>Food delivery from<br> local restaurants</span></a></li>
+          <li><a href="#">CreateSpace<br/><span>Indie Print Publishing<br> Made Easy</span></a></li>
+          <li><a href="#">Junglee.com<br/><span>Shop Online<br> in India</span></a></li>
+          <li><a href="#">Whispercast<br/><span>Discover &amp; Distribute<br> Digital Content</span></a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#">Amazon Business<br/><span>Everything For<br> Your Business</span></a></li>
+          <li><a href="#">Amazon Video Direct<br/><span>Video Distribution<br> Made Easy</span></a></li>
+          <li><a href="#">DPReview<br/><span>Digital<br> Photography</span></a></li>
+          <li><a href="#">Kindle Direct Publishing<br/><span>Indie Digital Publishing<br> Made Easy</span></a></li>
+          <li><a href="#">Withoutabox<br/><span>Submit to<br> Film Festivals</span></a></li>
+        </ul>
+
+        <ul class="copy text-center">
+          <li><a href="#">Conditions of Use</a></li>
+          <li><a href="#">Privacy Notice</a></li>
+          <li><a href="#">Interest-Based Ads</a></li>
+          <li>&copy; 1996-2017, Amazon.com, Inc. or its affiliates</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="JS/app.js"></script>
 </body>
-</html>
 
+</html>
